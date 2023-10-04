@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<style>
+    button {
+        padding: 10px;
+        margin : 15px;
+    }
+
+</style>
+
+</head>
+
+
+<body>
+    
+    <h1> Sumar Botones</h1>
+    <div id ="contenedor"></div>
+    <h2 id = "textoresultado">Resultado: </h2>
+    <h2 id ="resultado">0</h2>
+
+    <script src = "js/jquery-3.7.1.min.js"> </script>   
+    <script> 
+
+        $(document).ready(function(){
+            var resultado = 0;
+
+            for (var i = 1; i <= 10; i++) {
+             var button = $("<button>", {
+            "id": "boton" + i,
+            "text":  i,
+            "value": i,
+
+         });
+        
+            $("#contenedor").append(button);
+            
+
+            button.click(function(){
+                var num = $(this).val();
+                resultado += parseInt(num);
+                $("#resultado").text(resultado);
+                
+            })
+            
+            
+         }
+
+        
+
+        })
+
+    
+    </script>
+
+</body>
+</html>
