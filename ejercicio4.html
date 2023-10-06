@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <input id="checkbox1" type="checkbox" name="one" value="">
+        <label id="label1"> </label><br>
+        <input id="checkbox2" type="checkbox" name="two" value="">
+        <label id="label2"></label><br>
+        <input id="checkbox3" type="checkbox" name="thr" value="">
+        <label id="label3"></label><br>
+        <h1 id="resultado"> Resultado: </h1>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+          $(document).ready(function() {
+
+            var res = 0;
+            for (var i = 1; i <= 3; i++){ 
+
+            var aleatorio = parseInt(Math.random() * 100) + 1; 
+
+                $("#label"+i).text(aleatorio);
+                $("#checkbox" + i).attr("value", aleatorio); 
+            }
+
+              $('input[type="checkbox"]').click(function() {
+                  if($(this).prop("checked") == true) {
+                    res  = res + parseInt($(this).val());
+                    $("#resultado").text("Resultado:" +res)
+                  }
+                  else if($(this).prop("checked") == false) {
+                    res  = res - parseInt($(this).val());
+                    $("#resultado").text("Resultado:" +res)
+                  }
+                });
+            });
+        </script>
+
+
+    
+</body>
+</html>

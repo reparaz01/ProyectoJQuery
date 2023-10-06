@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+
+</head>
+<body>
+    <input type="range" id="rango" min="1" value="1" max="10"/>
+
+    <div id="contenedor"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#rango").change(function(){
+                var numimagenes = parseInt($(this).val());
+                $("#contenedor").text("");
+
+                for(var i = 1; i <= numimagenes; i++){
+                    var boton = $("<button>", {
+                        "id": "boton" + i,
+                        "text": "IMAGEN" + i,
+                        "value" : i,
+                    });
+                    var imagen = $("<img>", {
+                        "src": "images/mike.jpg",
+                        "id": "imagen" + i,
+                    });
+
+                    var botonActivo = false;
+
+                    // Agregar el evento click dentro del bucle
+                    boton.click(function() {
+                        if (botonActivo) {
+                            botonActivo = false;
+                            $("#imagen"+$(this).val()).attr("src", "images/mike.jpg");
+                        } else {
+                            botonActivo = true;
+                            $("#imagen"+$(this).val()).attr("src", "images/j.jpg");
+                        }
+                    });
+
+                    $("#contenedor").append(boton, imagen);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
