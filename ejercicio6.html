@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Alumnos XML</h1>
+    <label>Introduzca Nota</label>
+    <input type="text" id="cajanota"/>
+    <button id="botonbuscarnota">BUSCAR NOTA</button>
+    <hr/>
+    <ul id="listaalumnos"></ul>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script> 
+        $(document).ready(function(){
+            $("#botonbuscarnota").click(function(){
+                var nota = parseInt($("#cajanota").val()); 
+                $.get("documents/alumnos.xml", function(data){
+                    console.log("leyendo notas..");
+                    var html = "";
+
+                    $(data).find("alumno").each(function(){
+                        var notaAlumno = parseInt($(this).find("nota").text());
+
+                        if (notaAlumno >= nota) {
+                            var nombre = $(this).find("nombre").text();
+                            html += "<li>" + nombre + " - " + notaAlumno + "</li>";
+                        }
+                        $("#listaalumnos").html(html);
+                    });
+
+                    if (html === "") {
+                        alert("No existe ningún alumno con esa nota o superior.");
+                    } 
+                    
+                });
+            });
+        });
+    </script>
+</body>
+</html>

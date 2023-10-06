@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1> Coches</h1>
+    <label> Selecciona Marca </label>
+    <select id = "selector"> </select>
+    <button id="botonbuscarmarca">BUSCAR NOTA</button>
+    <hr/>
+    <ul id = "listamarcas"> </ul>
+
+ 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script> 
+
+    $(document).ready(function(){
+        
+            var marca = $("#selector").val();
+            var html = "";
+            $.get("documents/coches.xml", function(data){
+                // Procesar el archivo XML y agregar las marcas al select
+                $(data).find("marca").each(function() {
+                    var marca = $(this).text();
+
+                    $("#selector").append($("<option>", {
+                        value: marca,
+                        text: marca
+                    }));
+
+
+                    $("#botonbuscarmarca").click(function(){
+                        var valorSeleccionado = $("#selector").text();
+                        var numeroSeleccionado = parseInt($("#selector").index());
+                        
+
+                        
+                        $(data).find("idcoche").each(function() {
+
+
+                        });
+                        
+
+
+                            
+
+                    })
+
+
+
+            
+                })
+
+
+            })
+        
+    })
+    
+    </script>
+    
+</body>
+</html>
