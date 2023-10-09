@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Empleados por Departamento</title>
+</head>
+<body>
+    <h1>Mostrar Empleados por Oficio</h1>
+    <hr/><br>
+    
+    <h2>Lista de Oficios:</h2>
+    <ul id="lista-oficios"></ul>
+
+    <h2>Empleados por Oficio:</h2>
+    <table>
+        <thead>
+            <tr> 
+                <th>Id Empleado</th>
+                <th>Apellido</th>
+                <th>Oficio</th>
+                <th>Salario</th>
+                <th>Departamento </th>
+            </tr>
+        </thead>
+        <tbody id="tabla-empleados"></tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var urlEmpleados = "https://apiempleadosaction.azurewebsites.net/";
+        var urlDepartamentos = "https://apicruddepartamentoscore.azurewebsites.net/";
+
+        $(document).ready(function(){
+            loadOficios();
+
+            function loadOficios() {
+                var request = "api/empleados";
+                $.getJSON(urlEmpleados + request, function(data){
+                    var html = "";
+                    $.each(data, function(index, empleado){
+                        var oficios = [];
+                        var length = oficios.length;
+                        for (var i = 0; i < length; i++) {
+                           console.log(arr[i]);  
+                           if(oficios[i] = empleado.oficio){
+                            
+                           }
+                        }       
+
+                        html += "<li>";
+                        html += empleado + " - <a href='#' class='ver-empleados' data-departamento='" + departamento.numero + "'>Ver Empleados</a>";
+                        html += "</li>";
+                    });
+                    $("#lista-departamentos").html(html);
+
+                    
+                    $(".ver-empleados").click(function() {
+                        var departamentoNumero = $(this).data("departamento");
+                        loadEmpleadosPorDepartamento(departamentoNumero);
+                    });
+                });
+            }
+
+            function loadEmpleadosPorDepartamento(departamentoNumero) {
+                var request = "api/empleados"
+                $.getJSON(urlEmpleados + request, function(data){
+                    var html = "";
+                    $.each(data, function(index, empleado){
+                        if(departamentoNumero == empleado.departamento){
+
+
+                        html += "<tr>";
+                        html += "<td>" + empleado.idEmpleado + "</td>";
+                        html += "<td>" + empleado.apellido + "</td>";
+                        html += "<td>" + empleado.oficio + "</td>";
+                        html += "<td>" + empleado.salario + "</td>";
+                        html += "<td>" + empleado.departamento + "</td>";
+                        html += "</tr>";
+                        }
+                    });
+                    $("#tabla-empleados").html(html);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

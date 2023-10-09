@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1> Detalle Jugadores</h1>
+    <select id ="selectjugador"> </select>
+    <div id ="datosjugador"> </div>
+    <script src = "js/jquery-3.7.1.min.js"> </script>
+    <script> 
+        $(document).ready(function(){
+            $.getJSON("documents/jugadores.json",function(data){
+                     $.each(data.jugadores,function(index,jugador){
+                        var name = jugador.nombre;
+                        var option = $("<option>", {"text":name, "value":index});
+                            $("#selectjugador").append(option);
+                     })
+            })
+        $("#selectjugador").change(function(){
+            var seleccion = parseInt($(this).val());
+            $.getJSON("documents/jugadores.json",function(data){
+                var html ="";
+            $.each(data.jugadores,function(index,jugador){
+                console.log("index" +index);
+                console.log("seleccion"+seleccion);
+                if(index == seleccion){
+                var numero = jugador.numero;
+                var nombre = jugador.nombre;
+                var posicion = jugador.posicion;
+                var edad = jugador.edad;
+                var imagen = jugador.imagen;
+
+                   
+                html += "<h3> NUMERO " + numero + "</h3>";
+                html += "<h3> NOMBRE " + nombre + "</h3>";
+                html += "<h3> EDAD " + edad + "</h3>";
+                html += "<h3> POSICION " + posicion + "</h3>";
+                html += "<img src =" + imagen +"</img>";
+
+            }
+
+            })
+            $("#datosjugador").html(html);
+
+        })
+          }) 
+        })  
+    
+    </script>
+
+
+    
+</body>
+</html>

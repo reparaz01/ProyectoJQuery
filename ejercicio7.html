@@ -6,60 +6,47 @@
     <title>Document</title>
 </head>
 <body>
-    <h1> Coches</h1>
-    <label> Selecciona Marca </label>
-    <select id = "selector"> </select>
+    <h1>Coches</h1>
+    <label>Selecciona Marca</label>
+    <select id="selector"></select>
     <button id="botonbuscarmarca">BUSCAR NOTA</button>
     <hr/>
-    <ul id = "listamarcas"> </ul>
+    <ul id="listamarcas"></ul>
 
- 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script> 
-
-    $(document).ready(function(){
-        
-            var marca = $("#selector").val();
-            var html = "";
-            $.get("documents/coches.xml", function(data){
+    <script>
+        $(document).ready(function () {
+            $.get("documents/coches.xml", function (data) {
                 // Procesar el archivo XML y agregar las marcas al select
-                $(data).find("marca").each(function() {
+                $(data).find("marca").each(function () {
                     var marca = $(this).text();
-
                     $("#selector").append($("<option>", {
                         value: marca,
                         text: marca
                     }));
+                });
 
+                $("#botonbuscarmarca").click(function () {
+                    var valorSeleccionado = $("#selector").val();
+                    console.log(valorSeleccionado);
+                    $("#listamarcas").empty(); // Limpiar la lista antes de agregar elementos
 
-                    $("#botonbuscarmarca").click(function(){
-                        var valorSeleccionado = $("#selector").text();
-                        var numeroSeleccionado = parseInt($("#selector").index());
-                        
+                    var marcasEncontradas = []; // Para realizar un seguimiento de las marcas ya encontradas
 
-                        
-                        $(data).find("idcoche").each(function() {
-
-
-                        });
-                        
-
-
-                            
-
-                    })
-
-
-
-            
-                })
-
-
-            })
-        
-    })
-    
+                    $(data).find("coche").each(function () {
+                        var cocheMarca = $(this).find("marca").text();
+                        var cocheModelo = $(this).find("modelo").text();
+                        if (cocheMarca === valorSeleccionado && !marcasEncontradas.includes(cocheMarca)) {
+                            var cocheId = $(this).find("idcoche").text();
+                            var listItem = "<li>" + cocheId + " - " + valorSeleccionado + " - " + cocheModelo + "</li>";
+                            $("#listamarcas").append(listItem);
+                            marcasEncontradas.push(cocheMarca);
+                        }
+                    });
+                });
+            });
+        });
     </script>
-    
 </body>
 </html>
+<!-- INCOMPLETO -->

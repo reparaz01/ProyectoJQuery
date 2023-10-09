@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        button {
+            padding: 5px;
+            margin: 10px;
+        }
+    </style>
+       <style>
+        img{
+           width: 100px;
+           height: 100px;
+        }
+       
+           </style>
+       
+
+</head>
+<body>
+    <h1>Selecciona Cliente</h1>
+    <div id="contenedor"></div>
+    <hr/>
+    <ul id="datoscliente"></ul>
+    <ul id="datoscliente2"></ul>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get("documents/clientes.xml", function (data) {
+                $(data).find("CLIENTE").each(function () {
+                    var html = "";
+                    var idcliente = $(this).attr("IDCLIENTE");
+                    var nombreCliente = $(this).find("NOMBRE").text();
+
+                    var button = $("<button>", {
+                        "id": "boton" + idcliente,
+                        "text": nombreCliente,
+                        "value": idcliente,
+                    })
+                    $("#contenedor").append(button);
+
+                    // Agregar un controlador de eventos clic a cada botón
+                    button.click(function () {
+                        var clienteInfo = "";
+                        $(data).find("CLIENTE[IDCLIENTE='" + $(this).val() + "']").each(function () {
+                            clienteInfo += "ID del Cliente: " + $(this).attr("IDCLIENTE") + "<br>";
+                            clienteInfo += "Nombre: " + $(this).find("NOMBRE").text() + "<br>";
+                            clienteInfo += "Dirección: " + $(this).find("DIRECCION").text() + "<br>";
+                            clienteInfo += "Email: " + $(this).find("EMAIL").text() + "<br>";
+                            clienteInfo += "Código Postal: " + $(this).find("CODIGOPOSTAL").text() + "<br>";
+                            clienteInfo += "Página Web: " + $(this).find("PAGINAWEB").text() + "<br>";
+                            clienteInfo += "Imagen del Cliente: <img src='" + $(this).find("IMAGENCLIENTE").text() + "' width='200'><br><br>";
+
+
+                            html += "<li> ID - " + $(this).attr("IDCLIENTE") + "</li>";
+                            html += "<li> Nombre - " + $(this).find("NOMBRE").text() + "</li>";  
+                            html += "<li> Direccion - " + + $(this).find("DIRECCION").text() + "</li>";
+                            html += "<li> Email - " + $(this).find("EMAIL").text() + "</li>";  
+                            html += "<li> Postal - " + $(this).find("CODIGOPOSTAL").text() + "</li>";
+                            html += "<li> Web - " + $(this).find("PAGINAWEB").text() + "</li>";
+                            html += "<li> Imagen: <img src='" + $(this).find("IMAGENCLIENTE").text() + "' width='200'><br><br></li>";
+
+
+                        });
+                        $("#datoscliente").html(clienteInfo);
+                        $("#datoscliente2").html(html);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
