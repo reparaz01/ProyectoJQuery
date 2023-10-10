@@ -30,37 +30,37 @@
     <script>
         var urlEmpleados = "https://apiempleadosaction.azurewebsites.net/";
         var urlDepartamentos = "https://apicruddepartamentoscore.azurewebsites.net/";
-
+        var urlOficios = "https://apiempleadosaction.azurewebsites.net";
+        
         $(document).ready(function(){
             loadOficios();
 
             function loadOficios() {
-                var request = "api/empleados";
-                $.getJSON(urlEmpleados + request, function(data){
-                    var html = "";
-                    $.each(data, function(index, empleado){
-                        var oficios = [];
-                        var length = oficios.length;
-                        for (var i = 0; i < length; i++) {
-                           console.log(arr[i]);  
-                           if(oficios[i] = empleado.oficio){
-                            
-                           }
-                        }       
+    var request = "api/empleados";
+    $.getJSON(urlEmpleados + request, function(data){
+        var html = "";
+        var oficios = {}; // Usamos un objeto para evitar duplicados
 
-                        html += "<li>";
-                        html += empleado + " - <a href='#' class='ver-empleados' data-departamento='" + departamento.numero + "'>Ver Empleados</a>";
-                        html += "</li>";
-                    });
-                    $("#lista-departamentos").html(html);
-
-                    
-                    $(".ver-empleados").click(function() {
-                        var departamentoNumero = $(this).data("departamento");
-                        loadEmpleadosPorDepartamento(departamentoNumero);
-                    });
-                });
+        $.each(data, function(index, empleado){
+            var oficio = empleado.oficio;
+            console.log(empleado.oficio);
+            if (!oficios[oficio]) {
+                oficios[oficio] = true; // Agregamos el oficio al objeto si no existe
+                html += "<li>";
+                html += oficio + "<button id = > </button>";
+                html += "</li>";
             }
+            $("#lista-oficios").html(html);
+        });
+
+        $("#lista-departamentos").html(html);
+
+        $(".ver-empleados").click(function() {
+            var departamentoNumero = $(this).data("departamento");
+            loadEmpleadosPorDepartamento(departamentoNumero);
+        });
+    });
+}
 
             function loadEmpleadosPorDepartamento(departamentoNumero) {
                 var request = "api/empleados"
