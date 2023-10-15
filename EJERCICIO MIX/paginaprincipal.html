@@ -7,68 +7,81 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="container">
+        <h1 class="mt-5">Hospitales Crud</h1>
+        <hr/><br/>
 
-<div class="container">
-    <h1 class="mt-5">Hospitales Crud</h1>
-    <hr/><br/>
+        <label for="botoninsertar"> Pulsa para Insertar un Nuevo Hospital </label>
+        <a href="crear-hospital.html" button id="botoninsertar">INSERTAR</a>
 
-    <label for="botoninsertar"> Pulsa para Insertar un Nuevo Hospital </label>
-    <button id="botoninsertar">INSERTAR</button>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Hospital</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Camas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabladoctores"></tbody>
+        </table>
+    </div>
 
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th>ID Hospital</th>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Teléfono</th>
-                <th>Camas</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tabladoctores"></tbody>
-    </table>
-</div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        var urlHospitales = "https://apicrudhospital.azurewebsites.net/";
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    var urlHospitales = "https://apicrudhospital.azurewebsites.net/";
+        $(document).ready(function(){
+            loadHospitales();
+        });
 
-    $(document).ready(function(){
-        loadHospitales();
-    })
-
-    function loadHospitales(){
-    var request = "webresources/hospitales";
-    $.ajax({
-        url: urlHospitales + request,
-        type: "GET",
-        dataType: "json",
-        success: function(data){
-            console.log(urlHospitales + request);
-            console.log("Leyendo Servicio");
-            var html = "";
-            $.each(data, function(index, hospital){
-                html += "<tr>";
-                html += "<td>" + hospital.idhospital + "</td>";
-                html += "<td>" + hospital.nombre + "</td>";
-                html += "<td>" + hospital.direccion + "</td>";
-                html += "<td>" + hospital.telefono + "</td>";
-                html += "<td>" + hospital.camas + "</td>";
-                html += '<td><a href="editar-hospital.html?id=' + hospital.idhospital + '" class="btn btn-primary">Editar</a>';
-                html += ' <a href="eliminar-hospital.html?id=' + hospital.idhospital + '" class="btn btn-danger">Eliminar</a> </td>';
-                html += "</tr>";
+        function loadHospitales() {
+            var request = "/webresources/hospitales";
+            $.ajax({
+                url: urlHospitales + request,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var html = "";
+                    $.each(data, function(index, hospital) {
+                        html += "<tr>";
+                        html += "<td>" + hospital.idhospital + "</td>";
+                        html += "<td>" + hospital.nombre + "</td>";
+                        html += "<td>" + hospital.direccion + "</td>";
+                        html += "<td>" + hospital.telefono + "</td>";
+                        html += "<td>" + hospital.camas + "</td>";
+                        html += '<td><a href="editar-hospital.html?id=' + hospital.idhospital + '" class="btn btn-primary">Editar</a>';
+                        html += ' <button class="btn btn-danger botondelete" data-id="' + hospital.idhospital + '">Eliminar</button> </td>';
+                        html += "</tr>";
+                    });
+                    $("#tabladoctores").html(html);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al cargar hospitales: " + error);
+                }
             });
-            $("#tabladoctores").html(html);
-        },
-        error: function(xhr, status, error){
-            console.error("Error al cargar hospitales: " + error);
         }
-    });
-}
 
-
-</script>
+        $(document).on('click', '.botondelete', function() {
+            var hospitalId = $(this).data('id');
+            var request = "webresources/hospitales/delete/" + hospitalId;
+            console.log("hola webresources/hospitales/delete/" + hospitalId);
+            $.ajax({
+                url: urlHospitales + request,
+                type: "DELETE",
+                success: function(data) {
+                    alert("Hospital eliminado correctamente.");
+                    loadHospitales();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error al eliminar el hospital: " + error);
+                }
+            });
+        });
+        
+    </script>
 </body>
 </html>

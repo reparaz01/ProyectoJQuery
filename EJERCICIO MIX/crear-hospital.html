@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Hospital</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-5">Crear Hospital</h1>
+    <hr/><br/>
+
+    <form id="editarHospitalForm">
+        <div class="form-group">
+            <label for="id">ID Hospital:</label>
+            <input type="text" class="form-control" id="cajaid" name="id" placeholder="ID del hospital">
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="form-control" id="cajanombre" name="nombre" placeholder="Nombre del hospital">
+        </div>
+        <div class="form-group">
+            <label for="direccion">Dirección:</label>
+            <input type="text" class="form-control" id="cajadireccion" name="direccion" placeholder="Dirección del hospital">
+        </div>
+        <div class="form-group">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" class="form-control" id="cajatelefono" name="telefono" placeholder="Teléfono del hospital">
+        </div>
+        <div class="form-group">
+            <label for="camas">Camas:</label>
+            <input type="text" class="form-control" id="cajacamas" name="camas" placeholder="Número de camas">
+        </div>
+        <button id="botoninsertar" type="button" class="btn btn-primary">Crear Hospital</button>
+    </form>
+
+    <!-- Botón para volver a la lista de hospitales -->
+    <a href="paginaprincipal.html" class="btn btn-secondary mt-3">Volver a la Lista de Hospitales</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    
+    var urlHospitales = "https://apicrudhospital.azurewebsites.net/";
+
+    $(document).ready(function(){
+
+        $("#botoninsertar").click(function(){
+            var idhospital = parseInt($("#cajaid").val());
+            var nombre = $("#cajanombre").val(); 
+            var direccion = $("#cajadireccion").val(); 
+            var tlf = $("#cajatelefono").val();
+            var camas = parseInt($("#cajacamas").val()); 
+
+            var hospital = new Object(); 
+            hospital.idhospital = idhospital; 
+            hospital.nombre = nombre; 
+            hospital.direccion = direccion; 
+            hospital.telefono = tlf; 
+            hospital.camas = camas; 
+            
+            var dataJson = JSON.stringify(hospital);
+            var request = "webresources/hospitales/post";
+
+            $.ajax({
+                "url": urlHospitales + request,
+                "type": "POST",
+                "contentType": "application/json",
+                "data": dataJson,
+                success: function(){
+                    console.log("Creado correctamente");
+                },
+                error: function(xhr, status, error){
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

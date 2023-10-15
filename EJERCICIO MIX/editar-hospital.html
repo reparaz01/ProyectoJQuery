@@ -15,25 +15,25 @@
     <form id="editarHospitalForm">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del hospital">
+            <input type="text" class="form-control" id="cajanombre" name="nombre" placeholder="Nombre del hospital">
         </div>
         <div class="form-group">
             <label for="direccion">Dirección:</label>
-            <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirección del hospital">
+            <input type="text" class="form-control" id="cajadireccion" name="direccion" placeholder="Dirección del hospital">
         </div>
         <div class="form-group">
             <label for="telefono">Teléfono:</label>
-            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono del hospital">
+            <input type="text" class="form-control" id="cajatelefono" name="telefono" placeholder="Teléfono del hospital">
         </div>
         <div class="form-group">
             <label for="camas">Camas:</label>
-            <input type="number" class="form-control" id="camas" name="camas" placeholder="Número de camas">
+            <input type="number" class="form-control" id="cajacamas" name="camas" placeholder="Número de camas">
         </div>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button id="botoneditar" type="button" class="btn btn-primary">Guardar Cambios</button>
     </form>
 
     <!-- Botón para volver a la lista de hospitales -->
-    <a href="index.html" class="btn btn-secondary mt-3">Volver a la Lista de Hospitales</a>
+    <a href="paginaprincipal.html" class="btn btn-secondary mt-3">Volver a la Lista de Hospitales</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -43,43 +43,73 @@
     var urlHospitales = "https://apicrudhospital.azurewebsites.net/";
     var urlParams = new URLSearchParams(window.location.search);
     var idHospital = urlParams.get('id');
-
     
     $(document).ready(function(){
         loadHospital();
 
+        $("#botoneditar").click(function(){
+            var id = parseInt(idHospital);
+            var nombre = $("#cajanombre").val();
+            var direccion = $("#cajadireccion").val();
+            var telefono = $("#cajatelefono").val();
+            var camas = parseInt($("#cajacamas").val());
+
+            var dataJson = getJsonHospital(id, nombre, direccion, telefono, camas);
+            var request = "webresources/hospitales/put";
+
+            $.ajax({
+                url: urlHospitales + request,
+                type: "PUT",
+                contentType: "application/json",
+                data: dataJson,
+                success: function(){
+                    console.log("Editado correctamente");
+                },
+                error: function(xhr, status, error){
+                    console.error("Error al editar el hospital: " + error);
+                    console.error("Estado de la solicitud: " + status);
+                    console.error("Respuesta del servidor: " + xhr.responseText);
+                }
+            });
+        });
     });
 
     function loadHospital(){
-        var request = "/webresources/hospitales/{"+id+"}";   
-            
+        var request = "/webresources/hospitales/" + idHospital;
+
         $.ajax({
-        url: urlHospitales + request,
-        type: "GET",
-        dataType: "json",
-        success: function(data){
-            console.log(urlHospitales + request);
-            console.log("EDITANDO");
-            var html = "";
-            $.each(data, function(index, hospital){
-                console.log(hospital.nombre);
-                $("#nombre").text(hospital.nombre);
-                $("#direccion").text(hospital.direccion);
-                $("#telefono").text(hospital.telefono);
-                $("#camas").text(hospital.camas);
+            url: urlHospitales + request,
+            type: "GET",
+            dataType: "json",
+            success: function(data){
+                console.log(urlHospitales + request);
 
-
-            });
-            $("#tabladoctores").html(html);
-        },
-        error: function(xhr, status, error){
-            console.error("Error al cargar hospitales: " + error);
-        }
-    });
-
+                if (data) {
+                    var hospital = data;
+                    $("#cajanombre").val(hospital.nombre);
+                    $("#cajadireccion").val(hospital.direccion);
+                    $("#cajatelefono").val(hospital.telefono);
+                    $("#cajacamas").val(hospital.camas);
+                }
+            },
+            error: function(xhr, status, error){
+                console.error("Error al cargar hospital: " + error);
+                console.error("Estado de la solicitud: " + status);
+            }
+        });
     }
 
+    function getJsonHospital(id, nombre, direccion, telefono, camas){
+        var hospital = {
+            idhospital: id,
+            nombre: nombre,
+            direccion: direccion,
+            telefono: telefono,
+            camas: camas
+        };
 
+        return JSON.stringify(hospital);
+    }
 </script>
 </body>
 </html>

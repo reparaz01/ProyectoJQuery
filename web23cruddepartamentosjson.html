@@ -27,7 +27,7 @@
         <tbody></tbody>
     </table>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <script> 
         var urlDepartamentos = "https://apicruddepartamentoscore.azurewebsites.net/"; // URL corregida
         $(document).ready(function(){
@@ -85,15 +85,17 @@
             })
 
             $("#botondelete").click(function(){
+                var request="api/departamentos";
                 var id = parseInt($("#cajanumero").val());
-
+                var dataJson = getJsonDepartamento(id);
+                console.log("hollaaaaa"+urlDepartamentos + request +"/" + id);
                 $.ajax({
-                    "url":  urlDepartamentos + request,
+                    "url":  urlDepartamentos + request +"/" + id,
                     "type": "DELETE",
                     "contentType": "application/json",
                     "data": dataJson,
                     success: function(){
-                        console.log("Insertado correctamente");
+                        console.log("EliminadO correctamente");
                         loadDepartamentos();
                     }
                 })
