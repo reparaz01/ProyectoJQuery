@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Jugadores</title>
+        <link href="../css/bootstrap.css" rel="stylesheet">
+      </head>
+<body>
+  <div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="../resources/logo.jpg" width="50" height="50" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="apuestas.html">
+                            Apuestas
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Equipos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink" id="equiposMenu">
+                            <!-- Los elementos del menú de equipos se cargarán dinámicamente aquí -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+  </div>
+
+  <div class="container py-4">
+    <h2 class="mb-3">Jugadores: <span id="nombreEquipo"></span> &nbsp; 
+      <a href="#" id="volverButton" class="btn btn-success">Volver</a>
+    </h2>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="align-middle text-center">Nombre</th>
+          <th class="align-middle text-center">Foto</th>
+          <th class="align-middle text-center">Detalles</th>
+        </tr>
+      </thead>
+      <tbody id="jugadoresTable"></tbody>
+    </table>
+  </div>
+
+  <script src="../js/jquery-3.7.1.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script>
+
+    var urlApi = "https://apiejemplos.azurewebsites.net/";
+
+    $(document).ready(function() {
+      var params = new URLSearchParams(window.location.search);
+      var idEquipo = params.get('idEquipo');
+      var nombreEquipo = params.get('nombreEquipo');
+
+      $('#nombreEquipo').text(nombreEquipo);
+
+      var equipoUrl = 'equipo.html?idEquipo=' + idEquipo;
+      $('#volverButton').attr('href', equipoUrl);
+
+      loadJugadores(idEquipo);
+
+      function loadJugadores(idEquipo) {
+        var request = 'api/Jugadores/JugadoresEquipos/' + idEquipo;
+        var url = urlApi + request;
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data && data.length > 0) {
+                    var jugadoresTable = $('#jugadoresTable');
+                    var html = '<tr>';
+    
+                    $.each(data, function (index, jugador) {
+                        html += '<td class="align-middle text-center">' + jugador.nombre + '</td>';
+                        html += '<td class="align-middle text-center"><img src="' + jugador.imagen + '" alt="' + jugador.nombre + '" style="max-width: 100px;"></td>';
+                        html += '<td class="align-middle text-center"><a href="detallesjugador.html?idJugador=' + jugador.idJugador + '&idEquipo=' + idEquipo + '&nombreEquipo=' + nombreEquipo + '" class="btn btn-primary">Detalles</a></td>';
+                        html += '</tr>';
+                    });
+    
+                    jugadoresTable.html(html);
+                }
+            },
+            error: function (error) {
+                console.error('Error al cargar jugadores:', error);
+            }
+        });
+
+        loadEquiposMenu(); // Cargar el menú de equipos
+      }
+
+      function loadEquiposMenu() {
+        var request = 'api/equipos';
+        var url = urlApi + request;
+
+        $.ajax({
+          url: url,
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            var equiposMenu = $('#equiposMenu');
+            equiposMenu.empty();
+
+            if (data && data.length > 0) {
+              $.each(data, function(index, equipo) {
+                equiposMenu.append('<li><a class="dropdown-item" href="equipo.html?idEquipo=' + equipo.idEquipo + '">' + equipo.nombre + '</a></li>');
+              });
+            }
+          },
+          error: function(error) {
+            console.error('Error al cargar los equipos:', error);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
