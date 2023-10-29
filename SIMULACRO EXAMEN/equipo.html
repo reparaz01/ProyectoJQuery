@@ -60,10 +60,14 @@
         var urlApi = "https://apiejemplos.azurewebsites.net/";
 
         $(document).ready(function () {
+
+            loadEquiposMenu();
+            loadEquipos();
+
+            function loadEquipos(){
             // Obtener el ID del equipo de la URL
             var urlWeb = new URL(window.location.href);
             var idEquipo = urlWeb.searchParams.get("idEquipo");
-            console.log(idEquipo);
 
             if (idEquipo) {
                 var url = urlApi + 'api/equipos/' + idEquipo;
@@ -99,10 +103,12 @@
                         console.error('Error al cargar el equipo: ' + error);
                     }
                 });
+             }
+
             }
         });
 
-        // Cargar el menú de equipos
+        function loadEquiposMenu() {
         var request = 'api/equipos';
         var url = urlApi + request;
         $.ajax({
@@ -121,6 +127,9 @@
                 console.error('Error al cargar los equipos:', error);
             }
         });
+    }
     </script>
 </body>
 </html>
+
+

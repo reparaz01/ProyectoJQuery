@@ -61,66 +61,72 @@
         var urlApi = "https://apiejemplos.azurewebsites.net/";
 
         $(document).ready(function() {
-            // Obtener los parámetros de la URL
+            
+            loadEquiposMenu();
+            loadDetallesJugador();
+            
+            function loadDetallesJugador() {
             var urlWeb = new URL(window.location.href);
             var idJugador = urlWeb.searchParams.get("idJugador");
             var idEquipo = urlWeb.searchParams.get("idEquipo");
             var nombreEquipo = urlWeb.searchParams.get("nombreEquipo");
 
-            if (idJugador) {
-                var url = urlApi + 'api/jugadores/' + idJugador;
+                if (idJugador) {
+                    var url = urlApi + 'api/jugadores/' + idJugador;
 
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(jugador) {
-                        var jugadorDetails = $('#jugador-details');
-                        var html = '';
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(jugador) {
+                            var jugadorDetails = $('#jugador-details');
+                            var html = '';
 
-                        html += '<h1 class="text fw-bold mb-4">Detalles del Jugador</h1>';
-                        html += '<h2>Nombre: ' + jugador.nombre + '</h2>';
-                        html += '<hr>';
-                        html += '<p>Posición: ' + jugador.posicion + '</p>';
-                        html += '<hr>';
-                        html += '<p>Fecha de Nacimiento: ' + jugador.fechaNacimiento + '</p>';
-                        html += '<hr>';
-                        html += '<p>País: ' + jugador.pais + '</p>';
-                        html += '<hr>';
-                        html += '<div class="text-center"><img src="' + jugador.imagen + '" alt="' + jugador.nombre + '" style="width: 200px;"></div>';
-                        html += '<hr>';
-                        html += '<div class="container"><div class="row"><div class="text-center">';
-                        html += '<a href="jugadores.html?idEquipo=' + idEquipo + '&nombreEquipo=' + nombreEquipo + '" class="btn btn-success">Volver</a>';
-                        html += '</div></div></div>';
+                            html += '<h1 class="text fw-bold mb-4">Detalles del Jugador</h1>';
+                            html += '<h2>Nombre: ' + jugador.nombre + '</h2>';
+                            html += '<hr>';
+                            html += '<p>Posición: ' + jugador.posicion + '</p>';
+                            html += '<hr>';
+                            html += '<p>Fecha de Nacimiento: ' + jugador.fechaNacimiento + '</p>';
+                            html += '<hr>';
+                            html += '<p>País: ' + jugador.pais + '</p>';
+                            html += '<hr>';
+                            html += '<div class="text-center"><img src="' + jugador.imagen + '" alt="' + jugador.nombre + '" style="width: 200px;"></div>';
+                            html += '<hr>';
+                            html += '<div class="container"><div class="row"><div class="text-center">';
+                            html += '<a href="jugadores.html?idEquipo=' + idEquipo + '&nombreEquipo=' + nombreEquipo + '" class="btn btn-success">Volver</a>';
+                            html += '</div></div></div>';
 
-                        jugadorDetails.html(html);
-                    },
-                    error: function(error) {
-                        console.error('Error al cargar los detalles del jugador:', error);
-                    }
-                });
+                            jugadorDetails.html(html);
+                        },
+                        error: function(error) {
+                            console.error('Error al cargar los detalles del jugador:', error);
+                        }
+                    });
+                }
             }
         });
 
-        // Cargar el menú de equipos
+        function loadEquiposMenu() {
         var request = 'api/equipos';
         var url = urlApi + request;
-        $.ajax({
-            url: url,
-            method: 'GET',
-            success: function(data) {
-                var dropdownMenu = $('.dropdown-menu');
-                // Recorre los datos y crea los elementos del menú de equipos
-                data.forEach(function(equipo) {
-                    dropdownMenu.append(
-                        '<li><a class="dropdown-item" href="equipo.html?id=' + equipo.idEquipo + '">' + equipo.nombre + '</a></li>'
-                    );
-                });
-            },
-            error: function(error) {
-                console.error('Error al cargar los equipos:', error);
-            }
-        });
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(data) {
+                    var dropdownMenu = $('.dropdown-menu');
+                    // Recorre los datos y crea los elementos del menú de equipos
+                    data.forEach(function(equipo) {
+                        dropdownMenu.append(
+                            '<li><a class="dropdown-item" href="equipo.html?id=' + equipo.idEquipo + '">' + equipo.nombre + '</a></li>'
+                        );
+                    });
+                },
+                error: function(error) {
+                    console.error('Error al cargar los equipos:', error);
+                }
+            });
+        }
     </script>
 </body>
 </html>

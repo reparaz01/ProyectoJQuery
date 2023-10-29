@@ -70,6 +70,7 @@
 
     $(document).ready(function () {
         loadApuestas();
+        loadEquiposMenu(); 
 
         function loadApuestas() {
             var request = 'api/apuestas';
@@ -100,7 +101,6 @@
                 }
             });
 
-            loadEquiposMenu(); // Load the team menu
         }
 
         function loadEquiposMenu() {
